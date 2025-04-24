@@ -7,11 +7,11 @@ const { exec } = require('node:child_process');
 const ERROR_MESSAGE =
   'Expected "& { ... }" block after "@include" at-rule if declarations are present. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/';
 
-describe('@apostrophecms/require-nested-after-include stylelint rule', function() {
+describe('@apostrophecms/stylelint-mixed-decls stylelint rule', function() {
   this.timeout(10000);
 
-  it('should fail when a declaration after an at-rule is not scoped into a `& { ... }` block', function(done) {
-    exec('npx stylelint test/bad.scss', (error, stdout, stderr) => {
+  it('should fail when css contains nested rules and declarations mixed together', function(done) {
+    exec('npx stylelint test/bad-1.scss', (error, stdout, stderr) => {
       if (!stderr.includes(ERROR_MESSAGE)) {
         throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
       }
@@ -19,17 +19,17 @@ describe('@apostrophecms/require-nested-after-include stylelint rule', function(
     });
   });
 
-  it('should pass when a declaration after an at-rule is scoped into a `& { ... }` block', function(done) {
-    exec('npx stylelint test/good-1.scss', (error, stdout, stderr) => {
-      if (stderr.includes(ERROR_MESSAGE)) {
-        throw new Error(`Unexpected error message: ${ERROR_MESSAGE}`);
+  it('should fail when css contains @includes and declarations mixed together', function(done) {
+    exec('npx stylelint test/bad-2.scss', (error, stdout, stderr) => {
+      if (!stderr.includes(ERROR_MESSAGE)) {
+        throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
       }
       done();
     });
   });
 
-  it('should pass when there is no declaration after an at-rule', function(done) {
-    exec('npx stylelint test/good-2.scss', (error, stdout, stderr) => {
+  it('should pass when css contains nested rules and scoped declarations', function(done) {
+    exec('npx stylelint test/good.scss', (error, stdout, stderr) => {
       if (stderr.includes(ERROR_MESSAGE)) {
         throw new Error(`Unexpected error message: ${ERROR_MESSAGE}`);
       }

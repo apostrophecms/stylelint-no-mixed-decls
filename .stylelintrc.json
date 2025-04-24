@@ -3,6 +3,6 @@
     "./index.js"
   ],
   "rules": {
-    "@apostrophecms/require-nested-after-include": true
+    "@apostrophecms/stylelint-mixed-decls": true
   }
 }

@@ -1,0 +1,35 @@
+.foo-1 {
+  @include something;
+}
+
+.foo-2 {
+  @include something(foo);
+}
+
+.foo-3 {
+  @include something;
+
+  & {
+    text-decoration: underline;
+  }
+}
+
+.foo-4 {
+  @include something(foo);
+
+  & {
+    text-decoration: underline;
+  }
+}
+
+.foo-5 {
+  color: red;
+
+  &--serious {
+    font-weight: bold;
+  }
+
+  & {
+    font-weight: normal;
+  }
+}
