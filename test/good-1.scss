@@ -1,0 +1,15 @@
+.foo {
+  @include something;
+
+  & {
+    text-decoration: underline;
+  }
+}
+
+.bar {
+  @include something(bar);
+
+  & {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@apostrophecms/require-nested-after-include",
+  "version": "1.0.0",
+  "description": "A stylelint plugin that enforces nested rules to be defined after a `@include` rule.",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "npx eslint .",
+    "test": "npx mocha ./test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apostrophecms/require-nested-after-include.git"
+  },
+  "author": "Apostrophe Technologies, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apostrophecms/require-nested-after-include/issues"
+  },
+  "homepage": "https://github.com/apostrophecms/require-nested-after-include#readme",
+  "peerDependencies": {
+    "stylelint": ">= 16.1.0"
+  },
+  "devDependencies": {
+    "eslint-config-apostrophe": "^5.0.0",
+    "mocha": "^11.1.0",
+    "postcss-scss": "^4.0.9",
+    "stylelint-config-standard-scss": "^14.0.0"
+  }
+}
