@@ -1,4 +1,4 @@
-# @apostrophecms/stylelint-mixed-decls 
+# @apostrophecms/stylelint-no-mixed-decls 
 
 A stylelint plugin that enforces nested rules to be defined after a `@include` rule.
 
@@ -12,22 +12,22 @@ This is a breaking change in Sass since 1.77.7.
 ## Installation
 
 ```sh
-npm install @apostrophecms/stylelint-mixed-decls --save-dev
+npm install @apostrophecms/stylelint-no-mixed-decls --save-dev
 ```
 
 ## Usage
 
-If you've installed `@apostrophecms/stylelint-mixed-decls` locally within your project, add it to the `plugins` array and activate the rule in your `stylelint` config:
+If you've installed `@apostrophecms/stylelint-no-mixed-decls` locally within your project, add it to the `plugins` array and activate the rule in your `stylelint` config:
 
 ```js
 {
   "plugins": [
     // ...
-    "@apostrophecms/stylelint-mixed-decls"
+    "@apostrophecms/stylelint-no-mixed-decls"
   ],
   "rules": {
     // ...
-    "@apostrophecms/stylelint-mixed-decls": true
+    "@apostrophecms/stylelint-no-mixed-decls": true
   }
 }
 ```

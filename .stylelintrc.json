@@ -3,6 +3,6 @@
     "./index.js"
   ],
   "rules": {
-    "@apostrophecms/stylelint-mixed-decls": true
+    "@apostrophecms/stylelint-no-mixed-decls": true
   }
 }

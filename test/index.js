@@ -7,7 +7,7 @@ const { exec } = require('node:child_process');
 const ERROR_MESSAGE =
   'Expected "& { ... }" block after "@include" at-rule if declarations are present. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/';
 
-describe('@apostrophecms/stylelint-mixed-decls stylelint rule', function() {
+describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
   this.timeout(10000);
 
   it('should fail when css contains nested rules and declarations mixed together', function(done) {

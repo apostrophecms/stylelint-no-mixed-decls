@@ -1,33 +1,42 @@
 const stylelint = require('stylelint');
 
-const ruleName = '@apostrophecms/stylelint-mixed-decls';
+const ruleName = '@apostrophecms/stylelint-no-mixed-decls';
 const messages = stylelint.utils.ruleMessages(ruleName, {
-  expected: 'Expected "& { ... }" block after "@include" at-rule if declarations are present. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/'
+  mixed: 'Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/'
 });
 
 module.exports = stylelint.createPlugin(ruleName, () => {
   return (root, result) => {
     root.walkRules(rule => {
-      let foundNestedSelectorOrInclude = false;
+      let seenDeclaration = false;
+      let seenNested = false;
 
       rule.each(node => {
-        if (node.type === 'atrule' && node.name === 'include') {
-          foundNestedSelectorOrInclude = true;
-          return;
+        if (node.type === 'decl') {
+          if (seenNested) {
+            stylelint.utils.report({
+              message: messages.mixed,
+              node,
+              result,
+              ruleName
+            });
+          }
+          seenDeclaration = true;
         }
 
-        if (node.type === 'rule') {
-          foundNestedSelectorOrInclude = true;
-          return;
-        }
-
-        if (node.type === 'decl' && foundNestedSelectorOrInclude) {
-          stylelint.utils.report({
-            message: messages.expected,
-            node,
-            result,
-            ruleName
-          });
+        if (
+          (node.type === 'rule') ||
+          (node.type === 'atrule' && (node.name === 'include' || node.name === 'extend'))
+        ) {
+          if (seenDeclaration) {
+            stylelint.utils.report({
+              message: messages.mixed,
+              node,
+              result,
+              ruleName
+            });
+          }
+          seenNested = true;
         }
       });
     });

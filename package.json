@@ -1,5 +1,5 @@
 {
-  "name": "@apostrophecms/stylelint-mixed-decls",
+  "name": "@apostrophecms/stylelint-no-mixed-decls",
   "version": "1.0.1",
   "description": "A stylelint plugin that enforces nested rules to be defined after a `@include` rule.",
   "main": "index.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/apostrophecms/stylelint-mixed-decls.git"
+    "url": "git+https://github.com/apostrophecms/stylelint-no-mixed-decls.git"
   },
   "author": "Apostrophe Technologies, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/apostrophecms/stylelint-mixed-decls/issues"
+    "url": "https://github.com/apostrophecms/stylelint-no-mixed-decls/issues"
   },
-  "homepage": "https://github.com/apostrophecms/stylelint-mixed-decls#readme",
+  "homepage": "https://github.com/apostrophecms/stylelint-no-mixed-decls#readme",
   "peerDependencies": {
     "stylelint": ">= 16.1.0"
   },
