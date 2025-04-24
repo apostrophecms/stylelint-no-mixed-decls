@@ -9,10 +9,7 @@ module.exports = stylelint.createPlugin(ruleName, () => {
   return (root, result) => {
     root.walkRules((rule) => {
       rule.walkAtRules('include', (atRule) => {
-        console.log('atRule', atRule);
         const nextNode = atRule.next();
-        console.log('nextNode', nextNode);
-        console.log('nextNode.type', nextNode?.type);
 
         if (nextNode?.type === 'decl') {
           stylelint.utils.report({

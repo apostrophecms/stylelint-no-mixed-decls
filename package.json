@@ -1,6 +1,6 @@
 {
   "name": "@apostrophecms/require-nested-after-include",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A stylelint plugin that enforces nested rules to be defined after a `@include` rule.",
   "main": "index.js",
   "scripts": {
