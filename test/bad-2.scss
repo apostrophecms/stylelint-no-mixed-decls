@@ -1,5 +1,11 @@
-.foo {
-  @include something;
-
-  text-decoration: underline;
+@mixin foo {
+  display: block;
+  clear: both;
 }
+
+.a {
+  color: red;
+  @include foo;
+  font-size: 16px;
+}
+

@@ -1,28 +1,9 @@
-.foo-1 {
-  @include something;
+@mixin clearfix {
+  display: block;
+  clear: both;
 }
 
-.foo-2 {
-  @include something(foo);
-}
-
-.foo-3 {
-  @include something;
-
-  & {
-    text-decoration: underline;
-  }
-}
-
-.foo-4 {
-  @include something(foo);
-
-  & {
-    text-decoration: underline;
-  }
-}
-
-.foo-5 {
+.a {
   color: red;
 
   &--serious {
@@ -32,4 +13,22 @@
   & {
     font-weight: normal;
   }
+}
+
+.b {
+  color: red;
+
+  & {
+    font-size: 20px;
+  }
+
+  & {
+    font-weight: bold;
+  }
+}
+
+.c {
+  color: red;
+  @include clearfix;
+  font-size: 16px;
 }
