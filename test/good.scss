@@ -1,0 +1,43 @@
+@mixin my-safe-mixin {
+  display: block;
+  clear: both;
+}
+
+.a {
+  color: red;
+
+  &--bar {
+    font-weight: bold;
+  }
+
+  & {
+    font-weight: normal;
+  }
+}
+
+.b {
+  color: red;
+
+  & {
+    font-size: 20px;
+  }
+
+  & {
+    font-weight: bold;
+  }
+}
+
+.c {
+  @include my-safe-mixin;
+  font-size: 16px;
+}
+
+.d {
+  color: red;
+  @include my-safe-mixin;
+  font-size: 16px;
+}
+
+.e {
+  @include foo;
+}

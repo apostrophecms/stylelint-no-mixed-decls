@@ -1,0 +1,9 @@
+.example {
+  color: red;
+
+  &--serious {
+    font-weight: bold;
+  }
+
+  font-weight: normal;
+}

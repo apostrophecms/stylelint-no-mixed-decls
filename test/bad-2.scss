@@ -1,0 +1,15 @@
+@mixin foo {
+  display: block;
+  clear: both;
+
+  & {
+    font-weight: bold;
+  }
+}
+
+.a {
+  color: red;
+  @include foo;
+  font-size: 16px;
+}
+
