@@ -1,6 +1,10 @@
 @mixin foo {
   display: block;
   clear: both;
+
+  & {
+    font-weight: bold;
+  }
 }
 
 .a {

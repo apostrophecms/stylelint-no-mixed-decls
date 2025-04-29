@@ -5,33 +5,46 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
   mixed: 'Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/'
 });
 
-module.exports = stylelint.createPlugin(
-  ruleName,
-  (primaryOption, secondaryOptions = {}) => {
-    const safeMixins = secondaryOptions.safeMixins || [];
+module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {}) => {
+  const safeMixins = secondaryOptions.safeMixins || [];
 
-    return (root, result) => {
-      root.walkRules(rule => {
-        let seenDeclaration = false;
-        let seenNested = false;
+  return (root, result) => {
+    root.walkRules(rule => {
+      let seenDeclaration = false;
+      let seenNested = false;
 
-        rule.each(node => {
-          if (node.type === 'decl') {
-            if (seenNested) {
-              stylelint.utils.report({
-                message: messages.mixed,
-                node,
-                result,
-                ruleName
-              });
-            }
-            seenDeclaration = true;
+      rule.each(node => {
+        if (node.type === 'decl') {
+          if (seenNested) {
+            stylelint.utils.report({
+              message: messages.mixed,
+              node,
+              result,
+              ruleName
+            });
           }
+          seenDeclaration = true;
+        }
 
-          if (node.type === 'rule') {
-            console.log('node.selector', node.selector);
-            const isAmpersandBlock = node.selector.startsWith('&');
-            if (seenDeclaration && !isAmpersandBlock) {
+        if (node.type === 'rule') {
+          console.log('node.selector', node.selector);
+          const isAmpersandBlock = node.selector.startsWith('&');
+          if (seenDeclaration && !isAmpersandBlock) {
+            stylelint.utils.report({
+              message: messages.mixed,
+              node,
+              result,
+              ruleName
+            });
+          }
+          seenNested = true;
+        }
+
+        if (node.type === 'atrule' && node.name === 'include') {
+          const isSafeMixin = safeMixins.includes(node.params.trim());
+
+          if (!isSafeMixin) {
+            if (seenDeclaration) {
               stylelint.utils.report({
                 message: messages.mixed,
                 node,
@@ -41,26 +54,11 @@ module.exports = stylelint.createPlugin(
             }
             seenNested = true;
           }
-
-          if (node.type === 'atrule' && node.name === 'include') {
-            const isSafeMixin = safeMixins.includes(node.params.trim());
-
-            if (!isSafeMixin) {
-              if (seenDeclaration) {
-                stylelint.utils.report({
-                  message: messages.mixed,
-                  node,
-                  result,
-                  ruleName
-                });
-              }
-              seenNested = true;
-            }
-          }
-        });
+        }
       });
-    };
-  });
+    });
+  };
+});
 
 module.exports.ruleName = ruleName;
 module.exports.messages = messages;
