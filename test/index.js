@@ -5,7 +5,7 @@
 const { exec } = require('node:child_process');
 
 const ERROR_MESSAGE =
-  'Expected "& { ... }" block after "@include" at-rule if declarations are present. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/';
+  'Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/';
 
 describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
   this.timeout(10000);
@@ -19,8 +19,17 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
     });
   });
 
-  it('should fail when css contains @includes and declarations mixed together', function(done) {
+  it('should fail when css contains unsafe mixins and declarations mixed together', function(done) {
     exec('npx stylelint test/bad-2.scss', (error, stdout, stderr) => {
+      if (!stderr.includes(ERROR_MESSAGE)) {
+        throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
+      }
+      done();
+    });
+  });
+
+  it('should fail when css contains unsafe/undeclared mixins and declarations mixed together', function(done) {
+    exec('npx stylelint test/bad-3.scss', (error, stdout, stderr) => {
       if (!stderr.includes(ERROR_MESSAGE)) {
         throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
       }

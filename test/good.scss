@@ -32,3 +32,7 @@
   @include clearfix;
   font-size: 16px;
 }
+
+.d {
+  @include foo;
+}
