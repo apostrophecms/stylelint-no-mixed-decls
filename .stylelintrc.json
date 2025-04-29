@@ -6,7 +6,7 @@
     "@apostrophecms/stylelint-no-mixed-decls": [
       true,
       {
-        "safeMixins": [ "clearfix" ]
+        "safeMixins": [ "my-safe-mixin" ]
       }
     ]
   }
