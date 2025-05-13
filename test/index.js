@@ -10,39 +10,62 @@ const ERROR_MESSAGE =
 describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
   this.timeout(10000);
 
-  it('should fail when css contains nested rules and declarations mixed together', function(done) {
-    exec('npx stylelint test/bad-1.scss', (error, stdout, stderr) => {
-      if (!stderr.includes(ERROR_MESSAGE)) {
-        throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
-      }
-      done();
-    });
+  it('should fail when css contains nested rules and declarations mixed together', async function() {
+    const { stdout, stderr } = await runStylelint('test/bad-1.scss');
+
+    if (stdout) {
+      throw new Error(`Unexpected output: ${stdout}`);
+    }
+
+    if (!stderr.includes(ERROR_MESSAGE)) {
+      throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
+    }
   });
 
-  it('should fail when css contains unsafe mixins and declarations mixed together', function(done) {
-    exec('npx stylelint test/bad-2.scss', (error, stdout, stderr) => {
-      if (!stderr.includes(ERROR_MESSAGE)) {
-        throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
-      }
-      done();
-    });
+  it('should fail when css contains unsafe mixins and declarations mixed together', async function() {
+    const { stdout, stderr } = await runStylelint('test/bad-2.scss');
+
+    if (stdout) {
+      throw new Error(`Unexpected output: ${stdout}`);
+    }
+
+    if (!stderr.includes(ERROR_MESSAGE)) {
+      throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
+    }
   });
 
-  it('should fail when css contains unsafe/undeclared mixins and declarations mixed together', function(done) {
-    exec('npx stylelint test/bad-3.scss', (error, stdout, stderr) => {
-      if (!stderr.includes(ERROR_MESSAGE)) {
-        throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
-      }
-      done();
-    });
+  it('should fail when css contains unsafe/undeclared mixins and declarations mixed together', async function() {
+    const { stdout, stderr } = await runStylelint('test/bad-3.scss');
+
+    if (stdout) {
+      throw new Error(`Unexpected output: ${stdout}`);
+    }
+
+    if (!stderr.includes(ERROR_MESSAGE)) {
+      throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
+    }
   });
 
-  it('should pass when css contains nested rules and scoped declarations', function(done) {
-    exec('npx stylelint test/good.scss', (error, stdout, stderr) => {
-      if (stderr.includes(ERROR_MESSAGE)) {
-        throw new Error(`Unexpected error message: ${ERROR_MESSAGE}`);
-      }
-      done();
-    });
+  it('should pass when css contains nested rules and scoped declarations', async function() {
+    const { stdout, stderr } = await runStylelint('test/good.scss');
+
+    if (stdout) {
+      throw new Error(`Unexpected output: ${stdout}`);
+    }
+
+    if (stderr.includes(ERROR_MESSAGE)) {
+      throw new Error(`Unexpected error message: ${ERROR_MESSAGE}`);
+    }
   });
 });
+
+function runStylelint(filePath) {
+  return new Promise((resolve, reject) => {
+    exec(`npx stylelint ${filePath}`, (error, stdout, stderr) => {
+      resolve({
+        stdout,
+        stderr
+      });
+    });
+  });
+}
