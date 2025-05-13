@@ -1,7 +1,7 @@
 {
   "name": "@apostrophecms/stylelint-no-mixed-decls",
-  "version": "1.0.1",
-  "description": "A stylelint plugin that enforces nested rules to be defined after a `@include` rule.",
+  "version": "1.0.0",
+  "description": "A Stylelint plugin that enforces Sass's `mixed-decls` rule.",
   "main": "index.js",
   "scripts": {
     "pretest": "npx eslint .",
