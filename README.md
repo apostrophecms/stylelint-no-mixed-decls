@@ -128,3 +128,7 @@ Or
 ## Why this matters
 
 This plugin ensures your Sass code adheres to modern CSS nesting behavior, prevents breaking builds on newer Sass versions, and keeps your codebase cleanly structured.
+
+## Please contribute!
+
+We welcome contributions! If you find a bug or something missing, please open an issue or submit a pull request.
