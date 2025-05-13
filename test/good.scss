@@ -19,6 +19,10 @@
     font-weight: bold;
   }
 
+  .nested-rule {
+    font-weight: normal;
+  }
+
   & {
     font-weight: normal;
   }

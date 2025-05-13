@@ -7,7 +7,6 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 
 module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {}) => {
   const safeMixins = secondaryOptions.safeMixins || [];
-
   return (root, result) => {
     root.walkRules(rule => {
       let seenDeclaration = false;
@@ -26,17 +25,7 @@ module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {
           seenDeclaration = true;
         }
 
-        if (node.type === 'rule') {
-          console.log('node.selector', node.selector);
-          const isAmpersandBlock = node.selector.startsWith('&');
-          if (seenDeclaration && !isAmpersandBlock) {
-            stylelint.utils.report({
-              message: messages.mixed,
-              node,
-              result,
-              ruleName
-            });
-          }
+        if (node.type === 'rule' && node.selector.startsWith('&')) {
           seenNested = true;
         }
 
