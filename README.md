@@ -91,7 +91,7 @@ Add it to your Stylelint configuration:
     font-size: 24px;
   }
 
-  font-weight: bold; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+  font-weight: bold; // ❌ Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
 }
 ```
 
@@ -108,14 +108,14 @@ Add it to your Stylelint configuration:
 .foo {
   @include foo;
 
-  color: red; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+  color: red; // ❌ Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
 }
 ```
 
 ```scss
 @mixin foo {
-  display: block; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
-  clear: both; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+  display: block; // ❌ Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+  clear: both; // ❌ Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
 }
 
 .foo {
@@ -159,4 +159,5 @@ in a nested `& { }` block as a safe default when unsure of the mixin's contents.
 
 ## Please contribute!
 
-We welcome contributions! If you find a bug or something missing, please open an issue or submit a pull request.
+We welcome contributions! If you find a bug or something missing,
+please open an issue or submit a pull request.

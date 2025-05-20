@@ -2,7 +2,7 @@ const stylelint = require('stylelint');
 
 const ruleName = '@apostrophecms/stylelint-no-mixed-decls';
 const messages = stylelint.utils.ruleMessages(ruleName, {
-  mixed: 'Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/'
+  mixed: 'Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/'
 });
 
 module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {}) => {
