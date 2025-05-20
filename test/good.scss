@@ -1,9 +1,15 @@
-@mixin my-safe-mixin {
+@mixin flat {
   display: block;
   clear: both;
 }
 
-@mixin foo {
+@mixin scoped {
+  & {
+    font-weight: bold;
+  }
+}
+
+@mixin mixed {
   display: block;
   clear: both;
 
@@ -19,7 +25,7 @@
     font-weight: bold;
   }
 
-  .nested-rule {
+  .nested {
     font-weight: normal;
   }
 
@@ -41,16 +47,54 @@
 }
 
 .c {
-  @include my-safe-mixin;
-  font-size: 16px;
+  @include flat;
 }
 
 .d {
-  color: red;
-  @include my-safe-mixin;
-  font-size: 16px;
+  @include mixed;
 }
 
 .e {
-  @include foo;
+  @include scoped
+}
+
+.f {
+  @include external;
+}
+
+.g {
+  @include flat;
+  font-size: 16px;
+}
+
+.h {
+  color: red;
+  @include flat;
+  font-size: 16px;
+  @include mixed;
+  @include scoped;
+}
+
+.i {
+  @include flat;
+  @include scoped;
+
+  & {
+    color: red;
+  }
+}
+
+.j {
+  @include flat;
+
+  & {
+    color: red;
+  }
+
+  @include scoped;
+}
+
+.k {
+  @include external;
+  font-size: 16px;
 }

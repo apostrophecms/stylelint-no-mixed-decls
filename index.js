@@ -6,43 +6,61 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 });
 
 module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {}) => {
-  const safeMixins = secondaryOptions.safeMixins || [];
   return (root, result) => {
+    const mixinsWithNestedRules = [];
+
     root.walkRules(rule => {
-      let seenDeclaration = false;
+      if (
+        rule.type === 'rule' &&
+        rule.selector.startsWith('&') &&
+        rule.parent.type === 'atrule' &&
+        rule.parent.name === 'mixin'
+      ) {
+        mixinsWithNestedRules.push(rule.parent.params);
+      }
+
+      /* console.log(); */
+      /* console.log('-------------'); */
+      /* console.log(); */
+      /* console.log('rule.type', rule.type); */
+      /* console.log('rule.selector', rule.selector); */
+      /* console.log('rule.parent.type', rule.parent.type); */
+      /* console.log('rule.parent.name', rule.parent.name); */
+      /* console.log('rule.parent.params', rule.parent.params); */
       let seenNested = false;
+      let seenMixinWithNested = false;
 
       rule.each(node => {
-        if (node.type === 'decl') {
-          if (seenNested) {
-            stylelint.utils.report({
-              message: messages.mixed,
-              node,
-              result,
-              ruleName
-            });
-          }
-          seenDeclaration = true;
+        /* console.log(); */
+        /* console.log('node.type', node.type); */
+        /* console.log('node.name', node.name); */
+        /* console.log('node.params', node.params); */
+        /* console.log('node.selector', node.selector); */
+        /* console.log('node.prop', node.prop); */
+        /* console.log('node.value', node.value); */
+        /* console.log('---'); */
+        if (
+          node.type === 'decl' &&
+          (seenNested || seenMixinWithNested)
+        ) {
+          stylelint.utils.report({
+            message: messages.mixed,
+            node,
+            result,
+            ruleName
+          });
         }
 
         if (node.type === 'rule' && node.selector.startsWith('&')) {
           seenNested = true;
         }
 
-        if (node.type === 'atrule' && node.name === 'include') {
-          const isSafeMixin = safeMixins.includes(node.params.trim());
-
-          if (!isSafeMixin) {
-            if (seenDeclaration) {
-              stylelint.utils.report({
-                message: messages.mixed,
-                node,
-                result,
-                ruleName
-              });
-            }
-            seenNested = true;
-          }
+        if (
+          node.type === 'atrule' &&
+          node.name === 'include' &&
+          mixinsWithNestedRules.includes(node.params)
+        ) {
+          seenMixinWithNested = true;
         }
       });
     });

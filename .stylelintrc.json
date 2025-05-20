@@ -3,11 +3,6 @@
     "./index.js"
   ],
   "rules": {
-    "@apostrophecms/stylelint-no-mixed-decls": [
-      true,
-      {
-        "safeMixins": [ "my-safe-mixin" ]
-      }
-    ]
+    "@apostrophecms/stylelint-no-mixed-decls": true
   }
 }

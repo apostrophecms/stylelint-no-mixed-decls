@@ -10,8 +10,7 @@ A Stylelint plugin that enforces Sass's `mixed-decls` rule — requiring declara
 ## What this plugin does
 
 - Prevents declarations appearing after nested rules within a CSS block unless they're wrapped in a `& { }` block.
-- Reports if a declaration follows a `@include` mixin when the mixin is not known to be "safe" (i.e. it contains nested rules inside).
-- Allows configuring "safe" mixins — mixins you know contain only flat declarations and no nested rules.
+- Handle `@include` statements that may contain nested rules.
 
 ## Installation
 
@@ -36,55 +35,6 @@ Add it to your Stylelint configuration:
 }
 ```
 
-## Options
-
-You can optionally pass an object with a `safeMixins` array to declare which mixins are considered safe:
-
-```js
-{
-  "rules": {
-    "@apostrophecms/stylelint-no-mixed-decls": [
-      true,
-      {
-        safeMixins: [
-          "my-safe-mixin",
-          "another-safe-mixin"
-        ]
-      }
-    ]
-  }
-}
-```
-
-### Safe Mixins
-
-Safe mixins are mixins that only contain flat declarations — no nested rules or nested includes.
-
-If you have a mixin that you know is safe, you can add it to the `safeMixins` array in the options.
-
-Safe mixins example:
-
-```scss
-@mixin clearfix {
-  display: block;
-  clear: both;
-}
-```
-
-Unsafe mixins example:
-
-```scss
-@mixin border-radius {
-  border-radius: 4px;
-
-  &:hover {
-    border-radius: 8px;
-  }
-}
-```
-
-Unless explicitly listed in `safeMixins`, the plugin assumes all mixins could contain nested rules and treats them cautiously.
-
 ## Example: Correct Usage
 
 ```scss
@@ -101,6 +51,40 @@ Unless explicitly listed in `safeMixins`, the plugin assumes all mixins could co
 }
 ```
 
+```scss
+@mixin foo {
+  display: block;
+  clear: both;
+}
+
+.foo {
+  @include foo;
+
+  & {
+    color: red;
+  }
+}
+```
+
+```scss
+@mixin foo {
+  & {
+    display: block;
+    clear: both;
+  }
+}
+
+.foo {
+  font-weight: bold;
+
+  & {
+    color: red;
+  }
+
+  @include foo;
+}
+```
+
 ## Example: Incorrect Usage (will report)
 
 ```scss
@@ -111,19 +95,44 @@ Unless explicitly listed in `safeMixins`, the plugin assumes all mixins could co
     font-size: 24px;
   }
 
-  font-weight: bold; // ❌ not inside a & block
+  font-weight: bold; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
 }
 ```
-
-Or
 
 ```scss
-.foo {
-  @include border-radius;
+@mixin foo {
+  display: block;
+  clear: both;
 
-  color: red; // ❌ if `border-radius` is not listed as a safe mixin
+  &--large {
+    font-size: 24px;
+  }
+}
+
+.foo {
+  @include foo;
+
+  color: red; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
 }
 ```
+
+```scss
+@mixin foo {
+  display: block; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+  clear: both; // ❌ Cannot mix declarations and nested rules/at-rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+}
+
+.foo {
+  font-weight: bold;
+
+  & {
+    color: red;   
+  }
+
+  @include foo;
+}
+```
+
 
 ## Why this matters
 

@@ -1,4 +1,4 @@
-@mixin foo {
+@mixin mixed {
   display: block;
   clear: both;
 
@@ -7,9 +7,10 @@
   }
 }
 
+
 .a {
   color: red;
-  @include foo;
+  @include mixed;
   font-size: 16px;
 }
 

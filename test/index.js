@@ -22,20 +22,8 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
     }
   });
 
-  it('should fail when css contains unsafe mixins and declarations mixed together', async function() {
+  it('should fail when css contains nested rules and declarations mixed together (mixins)', async function() {
     const { stdout, stderr } = await runStylelint('test/bad-2.scss');
-
-    if (stdout) {
-      throw new Error(`Unexpected output: ${stdout}`);
-    }
-
-    if (!stderr.includes(ERROR_MESSAGE)) {
-      throw new Error(`Expected error message: ${ERROR_MESSAGE}`);
-    }
-  });
-
-  it('should fail when css contains unsafe/undeclared mixins and declarations mixed together', async function() {
-    const { stdout, stderr } = await runStylelint('test/bad-3.scss');
 
     if (stdout) {
       throw new Error(`Unexpected output: ${stdout}`);
