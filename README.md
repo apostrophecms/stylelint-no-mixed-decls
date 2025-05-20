@@ -2,7 +2,7 @@
 
 A Stylelint plugin that enforces Sass's `mixed-decls` rule — requiring declarations and nested rules to be ordered according to Sass's updated behavior.
 
->⚠️Since Sass `1.77.0+`, CSS blocks can no longer freely mix declarations and nested rules.  
+> ⚠️ Since Sass `1.77.0+`, CSS blocks can no longer freely mix declarations and nested rules.  
 > If you want to declare additional styles after nested rules, those declarations must be placed inside a `& { }` block.
 >
 > See: https://sass-lang.com/documentation/breaking-changes/mixed-decls/
@@ -24,12 +24,8 @@ Add it to your Stylelint configuration:
 
 ```js
 {
-  "plugins": [
-    // ...
-    "@apostrophecms/stylelint-no-mixed-decls"
-  ],
+  "plugins": [ "@apostrophecms/stylelint-no-mixed-decls" ],
   "rules": {
-    // ...
     "@apostrophecms/stylelint-no-mixed-decls": true
   }
 }
