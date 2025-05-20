@@ -7,7 +7,7 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 
 module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {}) => {
   return (root, result) => {
-    const mixinsWithNestedRules = [];
+    const mixinsWithNestedRules = {};
 
     root.walkRules(rule => {
       if (
@@ -16,29 +16,13 @@ module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {
         rule.parent.type === 'atrule' &&
         rule.parent.name === 'mixin'
       ) {
-        mixinsWithNestedRules.push(rule.parent.params);
+        mixinsWithNestedRules[rule.parent.params] = true;
       }
 
-      /* console.log(); */
-      /* console.log('-------------'); */
-      /* console.log(); */
-      /* console.log('rule.type', rule.type); */
-      /* console.log('rule.selector', rule.selector); */
-      /* console.log('rule.parent.type', rule.parent.type); */
-      /* console.log('rule.parent.name', rule.parent.name); */
-      /* console.log('rule.parent.params', rule.parent.params); */
       let seenNested = false;
       let seenMixinWithNested = false;
 
       rule.each(node => {
-        /* console.log(); */
-        /* console.log('node.type', node.type); */
-        /* console.log('node.name', node.name); */
-        /* console.log('node.params', node.params); */
-        /* console.log('node.selector', node.selector); */
-        /* console.log('node.prop', node.prop); */
-        /* console.log('node.value', node.value); */
-        /* console.log('---'); */
         if (
           node.type === 'decl' &&
           (seenNested || seenMixinWithNested)
@@ -58,7 +42,7 @@ module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {
         if (
           node.type === 'atrule' &&
           node.name === 'include' &&
-          mixinsWithNestedRules.includes(node.params)
+          mixinsWithNestedRules[node.params]
         ) {
           seenMixinWithNested = true;
         }
