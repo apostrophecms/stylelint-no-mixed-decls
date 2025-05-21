@@ -11,18 +11,6 @@ const ERROR_MESSAGE =
 describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
   this.timeout(10000);
 
-  it('should pass when css contains nested rules and scoped declarations', async function() {
-    const { stdout, stderr } = await runStylelint('test/good.scss');
-
-    if (stdout) {
-      throw new Error(`Unexpected output: ${stdout}`);
-    }
-
-    if (stderr.includes(ERROR_MESSAGE)) {
-      throw new Error(`Unexpected error message: ${ERROR_MESSAGE}`);
-    }
-  });
-
   it('should fail when css contains nested rules and declarations mixed together', async function() {
     const { stdout, stderr } = await runStylelint('test/bad.scss');
 
@@ -59,6 +47,18 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
         `Expected error message to include line ${position.join(':')} but it did not`
       );
     });
+  });
+
+  it('should pass when css contains nested rules and scoped declarations', async function() {
+    const { stdout, stderr } = await runStylelint('test/good.scss');
+
+    if (stdout) {
+      throw new Error(`Unexpected output: ${stdout}`);
+    }
+
+    if (stderr.includes(ERROR_MESSAGE)) {
+      throw new Error(`Unexpected error message: ${ERROR_MESSAGE}`);
+    }
   });
 });
 
