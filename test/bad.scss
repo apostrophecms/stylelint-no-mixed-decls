@@ -9,7 +9,7 @@
 }
 
 @mixin scoped {
-  & {
+  &__scoped {
     font-weight: bold;
   }
 }
