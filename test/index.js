@@ -21,7 +21,7 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
     const expectedOccurrences = 12;
     const occurrences = countOccurences(ERROR_MESSAGE, stderr);
 
-    const expectedErrorsPosition = [
+    const expectedErrorPositions = [
       [ 7, 3 ],
       [ 8, 3 ],
       [ 29, 3 ],
@@ -41,7 +41,7 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
       `Expected 12 occurrences of "${ERROR_MESSAGE}" but found ${occurrences}`
     );
 
-    expectedErrorsPosition.forEach(position => {
+    expectedErrorPositions.forEach(position => {
       assert.ok(
         stderr.includes(position.join(':')),
         `Expected error message to include line ${position.join(':')} but it did not`
