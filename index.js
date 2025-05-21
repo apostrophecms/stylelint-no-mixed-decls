@@ -8,15 +8,15 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
 module.exports = stylelint.createPlugin(ruleName, () => {
   return (root, result) => {
     root.walkRules(rule => {
-      let seenNestedRule = false;
+      let seenNested = false;
 
       rule.each(node => {
-        if (isNestedRule(node)) {
-          seenNestedRule = true;
+        if (isNested(node)) {
+          seenNested = true;
           return;
         }
 
-        if (isDecl(node) && seenNestedRule) {
+        if (isDecl(node) && seenNested) {
           stylelint.utils.report({
             message: messages.mixed,
             node,
@@ -25,6 +25,7 @@ module.exports = stylelint.createPlugin(ruleName, () => {
           });
         }
 
+        // Inspect the included mixin
         if (isInclude(node)) {
           root.walkAtRules('mixin', mixinRule => {
             // Skip other mixins that don't match
@@ -32,18 +33,17 @@ module.exports = stylelint.createPlugin(ruleName, () => {
             if (mixinRule.params !== node.params) {
               return;
             }
-            console.log('mixinRule', mixinRule.params);
+
             mixinRule.each(mixinNode => {
-              if (isNestedRule(mixinNode)) {
-                console.log('mixinNode.selector', mixinNode.selector);
-                seenNestedRule = true;
+              if (isNested(mixinNode)) {
+                seenNested = true;
                 return;
               }
 
-              if (isDecl(mixinNode) && seenNestedRule) {
+              if (isDecl(mixinNode) && seenNested) {
                 stylelint.utils.report({
                   message: messages.mixed,
-                  node,
+                  node: mixinNode,
                   result,
                   ruleName
                 });
@@ -63,9 +63,9 @@ function isDecl(node) {
   return node.type === 'decl';
 }
 
-// Note, a `.` in the selector is not considered a nested rule,
-// at least not a problem in Sass.
-function isNestedRule(node) {
+// Note: a `.` in the selector is not considered a nested rule,
+// at least, it's not considered as mixed content in Sass.
+function isNested(node) {
   return node.type === 'rule' && /^&([^.])*$/.test(node.selector);
 }
 
