@@ -36,6 +36,10 @@ module.exports = stylelint.createPlugin(ruleName, () => {
 
             mixinRule.each(mixinNode => {
               if (isNested(mixinNode)) {
+                // If we find a nested rule inside the mixin,
+                // flag this "global" variable to true so that
+                // any declarations after this point will be
+                // reported, even the ones inside the mixin.
                 seenNested = true;
                 return;
               }
