@@ -75,8 +75,8 @@
   color: red;
   @include flat;
   font-size: 16px;
-  @include scoped;
   @include mixed;
+  @include scoped;
 }
 
 .i {

@@ -11,42 +11,6 @@ const ERROR_MESSAGE =
 describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
   this.timeout(10000);
 
-  it('should fail when css contains nested rules and declarations mixed together', async function() {
-    const { stdout, stderr } = await runStylelint('test/bad-1.scss');
-
-    if (stdout) {
-      throw new Error(`Unexpected output: ${stdout}`);
-    }
-
-    const occurrences = countOccurences(ERROR_MESSAGE, stderr);
-
-    assert.strictEqual(occurrences, 2, `Expected 2 occurrences of "${ERROR_MESSAGE}" but found ${occurrences}`);
-  });
-
-  it('should fail when css contains nested rules and declarations mixed together (with mixins)', async function() {
-    const { stdout, stderr } = await runStylelint('test/bad-2.scss');
-
-    if (stdout) {
-      throw new Error(`Unexpected output: ${stdout}`);
-    }
-
-    const occurrences = countOccurences(ERROR_MESSAGE, stderr);
-
-    assert.strictEqual(occurrences, 1, `Expected 1 occurrences of "${ERROR_MESSAGE}" but found ${occurrences}`);
-  });
-
-  it.only('should fail when css contains nested rules and declarations mixed together (mixins only)', async function() {
-    const { stdout, stderr } = await runStylelint('test/bad-3.scss');
-
-    if (stdout) {
-      throw new Error(`Unexpected output: ${stdout}`);
-    }
-
-    const occurrences = countOccurences(ERROR_MESSAGE, stderr);
-
-    assert.strictEqual(occurrences, 4, `Expected 4 occurrences of "${ERROR_MESSAGE}" but found ${occurrences}`);
-  });
-
   it('should pass when css contains nested rules and scoped declarations', async function() {
     const { stdout, stderr } = await runStylelint('test/good.scss');
 
@@ -57,6 +21,44 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
     if (stderr.includes(ERROR_MESSAGE)) {
       throw new Error(`Unexpected error message: ${ERROR_MESSAGE}`);
     }
+  });
+
+  it('should fail when css contains nested rules and declarations mixed together', async function() {
+    const { stdout, stderr } = await runStylelint('test/bad.scss');
+
+    if (stdout) {
+      throw new Error(`Unexpected output: ${stdout}`);
+    }
+
+    const expectedOccurrences = 12;
+    const occurrences = countOccurences(ERROR_MESSAGE, stderr);
+
+    const expectedErrorsPosition = [
+      [ 7, 3 ],
+      [ 8, 3 ],
+      [ 29, 3 ],
+      [ 34, 3 ],
+      [ 35, 3 ],
+      [ 45, 3 ],
+      [ 46, 3 ],
+      [ 56, 3 ],
+      [ 57, 3 ],
+      [ 64, 3 ],
+      [ 70, 3 ]
+    ];
+
+    assert.strictEqual(
+      occurrences,
+      expectedOccurrences,
+      `Expected 12 occurrences of "${ERROR_MESSAGE}" but found ${occurrences}`
+    );
+
+    expectedErrorsPosition.forEach(position => {
+      assert.ok(
+        stderr.includes(position.join(':')),
+        `Expected error message to include line ${position.join(':')} but it did not`
+      );
+    });
   });
 });
 
