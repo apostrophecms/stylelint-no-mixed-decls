@@ -75,8 +75,8 @@
   color: red;
   @include flat;
   font-size: 16px;
-  @include mixed;
   @include scoped;
+  @include mixed;
 }
 
 .i {
@@ -101,4 +101,12 @@
 .k {
   @include external;
   font-size: 16px;
+}
+
+.l {
+  &.not-a-nested-rule {
+    font-weight: normal;
+  }
+
+  color: red;
 }

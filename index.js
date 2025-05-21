@@ -5,28 +5,18 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
   mixed: 'Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/'
 });
 
-module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {}) => {
+module.exports = stylelint.createPlugin(ruleName, () => {
   return (root, result) => {
-    const mixinsWithNestedRules = {};
-
     root.walkRules(rule => {
-      if (
-        rule.type === 'rule' &&
-        rule.selector.startsWith('&') &&
-        rule.parent.type === 'atrule' &&
-        rule.parent.name === 'mixin'
-      ) {
-        mixinsWithNestedRules[rule.parent.params] = true;
-      }
-
-      let seenNested = false;
-      let seenMixinWithNested = false;
+      let seenNestedRule = false;
 
       rule.each(node => {
-        if (
-          node.type === 'decl' &&
-          (seenNested || seenMixinWithNested)
-        ) {
+        if (isNestedRule(node)) {
+          seenNestedRule = true;
+          return;
+        }
+
+        if (isDecl(node) && seenNestedRule) {
           stylelint.utils.report({
             message: messages.mixed,
             node,
@@ -35,16 +25,31 @@ module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {
           });
         }
 
-        if (node.type === 'rule' && node.selector.startsWith('&')) {
-          seenNested = true;
-        }
+        if (isInclude(node)) {
+          root.walkAtRules('mixin', mixinRule => {
+            // Skip other mixins that don't match
+            // the name of the current include:
+            if (mixinRule.params !== node.params) {
+              return;
+            }
+            console.log('mixinRule', mixinRule.params);
+            mixinRule.each(mixinNode => {
+              if (isNestedRule(mixinNode)) {
+                console.log('mixinNode.selector', mixinNode.selector);
+                seenNestedRule = true;
+                return;
+              }
 
-        if (
-          node.type === 'atrule' &&
-          node.name === 'include' &&
-          mixinsWithNestedRules[node.params]
-        ) {
-          seenMixinWithNested = true;
+              if (isDecl(mixinNode) && seenNestedRule) {
+                stylelint.utils.report({
+                  message: messages.mixed,
+                  node,
+                  result,
+                  ruleName
+                });
+              }
+            });
+          });
         }
       });
     });
@@ -53,3 +58,17 @@ module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions = {
 
 module.exports.ruleName = ruleName;
 module.exports.messages = messages;
+
+function isDecl(node) {
+  return node.type === 'decl';
+}
+
+// Note, a `.` in the selector is not considered a nested rule,
+// at least not a problem in Sass.
+function isNestedRule(node) {
+  return node.type === 'rule' && /^&([^.])*$/.test(node.selector);
+}
+
+function isInclude(node) {
+  return node.type === 'atrule' && node.name === 'include';
+}
