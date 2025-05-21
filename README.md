@@ -55,6 +55,22 @@ Add it to your Stylelint configuration:
 
 .foo {
   @include foo;
+  color: red;
+}
+```
+
+```scss
+@mixin foo {
+  display: block;
+  clear: both;
+
+  &--large {
+    font-size: 24px;
+  }
+}
+
+.foo {
+  @include foo;
 
   & {
     color: red;
@@ -107,7 +123,6 @@ Add it to your Stylelint configuration:
 
 .foo {
   @include foo;
-
   color: red; // ❌ Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
 }
 ```
