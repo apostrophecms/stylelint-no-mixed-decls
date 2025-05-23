@@ -1,28 +1,29 @@
 {
-  "name": "@apostrophecms/require-nested-after-include",
-  "version": "1.0.1",
-  "description": "A stylelint plugin that enforces nested rules to be defined after a `@include` rule.",
+  "name": "@apostrophecms/stylelint-no-mixed-decls",
+  "version": "1.0.0",
+  "description": "A Stylelint plugin that enforces Sass's `mixed-decls` rule.",
   "main": "index.js",
   "scripts": {
     "pretest": "npx eslint .",
-    "test": "npx mocha ./test/index.js"
+    "test": "nyc mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/apostrophecms/require-nested-after-include.git"
+    "url": "git+https://github.com/apostrophecms/stylelint-no-mixed-decls.git"
   },
   "author": "Apostrophe Technologies, Inc.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/apostrophecms/require-nested-after-include/issues"
+    "url": "https://github.com/apostrophecms/stylelint-no-mixed-decls/issues"
   },
-  "homepage": "https://github.com/apostrophecms/require-nested-after-include#readme",
+  "homepage": "https://github.com/apostrophecms/stylelint-no-mixed-decls#readme",
   "peerDependencies": {
     "stylelint": ">= 16.1.0"
   },
   "devDependencies": {
     "eslint-config-apostrophe": "^5.0.0",
     "mocha": "^11.1.0",
+    "nyc": "^17.1.0",
     "postcss-scss": "^4.0.9",
     "stylelint-config-standard-scss": "^14.0.0"
   }
