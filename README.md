@@ -72,7 +72,7 @@ This is an answer to the [limitations](#limitations) that this plugin cannot ana
 
 .foo {
   @include foo;
-  @include external-mixin // not known to contain nested rules
+  @include external-mixin; // not known to contain nested rules
   color: red;
 }
 ```
