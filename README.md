@@ -198,10 +198,11 @@ or colocate them with the code that uses them.
 Alternatively, wrap declarations following `@include` statements
 in a nested `& { }` block as a safe default when unsure of the mixin's contents.
 
-**`contain-nested` option**
+**Use `contain-nested` option:**
 
 This option can be used to list mixins that are known to contain nested rules,
-so that the plugin can treat them accordingly.
+so that the plugin can treat them accordingly,
+even if their definition is not present in the file they are used.
 
 ## Please contribute!
 
