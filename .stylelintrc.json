@@ -3,7 +3,7 @@
     "./index.js"
   ],
   "rules": {
-    "@apostrophecms/stylelint-no-mixed-decls":[
+    "@apostrophecms/stylelint-no-mixed-decls": [
       true,
       {
         "contain-nested": [ "external-mixin-known-to-contain-nested-rules" ]
