@@ -71,3 +71,11 @@
   @include flat-2;
   @include mixed-2;
 }
+
+// This is bad because the mixin is known to contain nested rules,
+// therefore the rule that comes after it should be wrapped.
+.d {
+  @include external-mixin-known-to-contain-nested-rules;
+
+  color: red;
+}

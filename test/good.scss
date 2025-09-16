@@ -110,3 +110,24 @@
 
   color: red;
 }
+
+// This is okay because the mixin isn't known to contain nested rules.
+.m {
+  @include external-mixin;
+
+  color: red;
+}
+
+// This is okay because nothings comes after the mixin.
+.n {
+  @include external-mixin-known-to-contain-nested-rules;
+}
+
+// This is okay because the rule that comes after the mixin is wrapped.
+.o {
+  @include external-mixin-known-to-contain-nested-rules;
+
+  & {
+    color: red;
+  }
+}

@@ -18,13 +18,11 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
       throw new Error(`Unexpected output: ${stdout}`);
     }
 
-    const expectedOccurrences = 12;
-    const occurrences = countOccurences(ERROR_MESSAGE, stderr);
-
     const expectedErrorPositions = [
       [ 7, 3 ],
       [ 8, 3 ],
       [ 29, 3 ],
+      [ 30, 3 ],
       [ 34, 3 ],
       [ 35, 3 ],
       [ 45, 3 ],
@@ -32,21 +30,26 @@ describe('@apostrophecms/stylelint-no-mixed-decls stylelint rule', function() {
       [ 56, 3 ],
       [ 57, 3 ],
       [ 64, 3 ],
-      [ 70, 3 ]
+      [ 70, 3 ],
+      [ 78, 3 ]
     ];
+    const expectedErrorOccurrences = expectedErrorPositions.length;
+    const actualErrorOccurrences = countOccurences(ERROR_MESSAGE, stderr);
+
+    const errorPositionsMessages = expectedErrorPositions
+      .map(position =>
+        !stderr.includes(position.join(':')) &&
+        `Expected error message to include line ${position.join(':')} but it did not`
+      )
+      .filter(Boolean);
 
     assert.strictEqual(
-      occurrences,
-      expectedOccurrences,
-      `Expected 12 occurrences of "${ERROR_MESSAGE}" but found ${occurrences}`
-    );
+      actualErrorOccurrences,
+      expectedErrorOccurrences,
+      `Expected ${expectedErrorOccurrences} occurrences of "${ERROR_MESSAGE}" but found ${actualErrorOccurrences}.
 
-    expectedErrorPositions.forEach(position => {
-      assert.ok(
-        stderr.includes(position.join(':')),
-        `Expected error message to include line ${position.join(':')} but it did not`
-      );
-    });
+${errorPositionsMessages.join('\n')}`
+    );
   });
 
   it('should pass when css contains nested rules and scoped declarations', async function() {

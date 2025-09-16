@@ -5,7 +5,7 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
   mixed: 'Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/'
 });
 
-module.exports = stylelint.createPlugin(ruleName, () => {
+module.exports = stylelint.createPlugin(ruleName, (primary, secondaryOptions) => {
   return (root, result) => {
     root.walkRules(rule => {
       let seenNested = false;
@@ -25,25 +25,34 @@ module.exports = stylelint.createPlugin(ruleName, () => {
           });
         }
 
-        // Inspect the included mixin
+        // If the incuded mixin is known to contain nested rules,
+        // we can skip checking it and just set `seenNested` to true.
+        // Any declarations after this point will be
+        // reported, even the ones inside the mixin.
         if (isInclude(node)) {
+          const nameWithoutArgs = node.params.replace(/\(.*$/, '');
+
+          // If the mixin is known to contain nested rules because
+          // it's listed as such in the options:
+          if (secondaryOptions?.['contain-nested']?.includes(nameWithoutArgs)) {
+            seenNested = true;
+            return;
+          }
+
+          // Otherwise, we need to find the mixin definition:
           root.walkAtRules('mixin', mixinRule => {
-            // Skip other mixins that don't match
-            // the name of the current include:
             if (mixinRule.params !== node.params) {
               return;
             }
 
             mixinRule.each(mixinNode => {
+              // If the mixin is actually seen to contain nested rules:
               if (isNested(mixinNode)) {
-                // If we find a nested rule inside the mixin,
-                // flag this "global" variable to true so that
-                // any declarations after this point will be
-                // reported, even the ones inside the mixin.
                 seenNested = true;
                 return;
               }
 
+              // If the mixin itself contains declarations after nested rules:
               if (isDecl(mixinNode) && seenNested) {
                 stylelint.utils.report({
                   message: messages.mixed,

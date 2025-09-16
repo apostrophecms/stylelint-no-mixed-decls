@@ -31,6 +31,23 @@ Add it to your Stylelint configuration:
 }
 ```
 
+You can set a `contain-nested` option to list mixins that are known to contain nested rules.  
+This is an answer to the [limitations](#limitations) that this plugin cannot analyze mixin definitions from other files.
+
+```js
+{
+  "plugins": [ "@apostrophecms/stylelint-no-mixed-decls" ],
+  "rules": {
+    "@apostrophecms/stylelint-no-mixed-decls": [
+      true,
+      {
+        "contain-nested": [ "external-mixin-known-to-contain-nested-rules" ]
+      }
+    ] 
+  }
+}
+```
+
 ## Example: Correct Usage
 
 ```scss
@@ -55,6 +72,7 @@ Add it to your Stylelint configuration:
 
 .foo {
   @include foo;
+  @include external-mixin; // not known to contain nested rules
   color: red;
 }
 ```
@@ -144,6 +162,14 @@ Add it to your Stylelint configuration:
 }
 ```
 
+```scss
+.foo {
+  @include external-mixin-known-to-contain-nested-rules;
+
+  color: red; // ❌ Cannot mix declarations and nested rules. Group them together or wrap declarations in a nested "& { }" block. See https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+}
+```
+
 ## Why this matters
 
 This plugin ensures your Sass code adheres to modern CSS nesting behavior,
@@ -171,6 +197,12 @@ To ensure accurate linting results, define critical mixins with nested rules con
 or colocate them with the code that uses them.
 Alternatively, wrap declarations following `@include` statements
 in a nested `& { }` block as a safe default when unsure of the mixin's contents.
+
+**Use `contain-nested` option:**
+
+This option can be used to list mixins that are known to contain nested rules,
+so that the plugin can treat them accordingly,
+even if their definition is not present in the file they are used.
 
 ## Please contribute!
 
